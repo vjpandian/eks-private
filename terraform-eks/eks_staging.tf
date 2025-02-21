@@ -1,8 +1,8 @@
 locals {
   cluster_basename                = "vijay-staging-eks"
-  kubernetes_version              = "1.31"
+  kubernetes_version              = "1.32"
   ng_support_default_min_size     = 0
-  ng_support_default_desired_size = 4
+  ng_support_default_desired_size = 2
   ng_support_default_max_size     = 5
   circleci_staging_eks_admin_role = "fieldeng-awesomeci-role"
 
@@ -48,8 +48,8 @@ module "eks" {
 
       min_size = local.ng_support_default_min_size
       max_size = local.ng_support_default_max_size
-      #desired_size         = var.ng_desired_size
-      force_update_version = true
+      desired_size         = local.ng_support_default_desired_size
+      force_update_version = false
       # The role created by the Terraform module already has the cluster-specific attributes
       # Setting this to false ensures that the name_prefix conforms to the limits set by AWS
       iam_role_use_name_prefix = false
@@ -95,7 +95,7 @@ module "eks" {
 
       min_size = local.ng_support_default_min_size
       max_size = local.ng_support_default_max_size
-      #desired_size         = var.ng_desired_size
+      desired_size         = local.ng_desired_size
       force_update_version = true
       # The role created by the Terraform module already has the cluster-specific attributes
       # Setting this to false ensures that the name_prefix conforms to the limits set by AWS
@@ -146,7 +146,6 @@ module "eks" {
   enable_cluster_creator_admin_permissions = true
 
   access_entries = {
-
     fieldeng_aws_ci_role_access = {
       # This is for providing the role access to run kubectl commands via CI pipelines
       principal_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${local.circleci_staging_eks_admin_role}"
