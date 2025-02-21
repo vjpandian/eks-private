@@ -9,7 +9,7 @@ parameters:
     default: "terraform-vpc"
   destroy:
     type: boolean
-    default: true
+    default: false
 
 executors:
   tf-light:
@@ -36,7 +36,6 @@ jobs:
       WORKSPACE: <<pipeline.parameters.tf-workspace>>
     steps:
       - checkout
-      - run: mv providers.tf <<pipeline.parameters.tf-workspace>>
       - tf-init-plan
       - persist_to_workspace:
           root: .
@@ -67,7 +66,6 @@ jobs:
        AWS_DEFAULT_REGION: <<pipeline.parameters.aws-region>>
     steps:
       - checkout
-      - run: mv providers.tf <<pipeline.parameters.tf-workspace>>
       - run:
           name: terraform init & plan
           command: |
