@@ -6,7 +6,7 @@ parameters:
     default: "us-east-1"
   tf-workspace:
     type: string
-    default: "terraform-eks"
+    default: "terraform-vpc"
   destroy:
     type: boolean
     default: false
