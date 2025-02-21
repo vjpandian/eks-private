@@ -17,7 +17,7 @@ module "eks" {
   cluster_name    = local.cluster_basename
   cluster_version = local.kubernetes_version
 
-  cluster_endpoint_public_access = true
+  cluster_endpoint_public_access = false
 
   cluster_addons = {
     coredns = {
