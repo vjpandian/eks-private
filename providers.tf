@@ -28,6 +28,20 @@ terraform {
   }
 }
 
+variable "aws_access_key" {
+  description = "Access key used to create instances"
+}
+
+variable "aws_secret_key" {
+  description = "Secret key used to create instances"
+}
+
+variable "aws_region" {
+  description = "Default AWS Region for EKS Cluster"
+  default     = "us-east-1"
+}
+
+
 provider "aws" {
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key

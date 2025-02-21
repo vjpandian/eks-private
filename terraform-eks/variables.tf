@@ -8,11 +8,6 @@ variable "eks_managed_node_group_defaults" {
   default = ["t3a.medium"]
 }
 
-variable "aws_region" {
-  description = "Default AWS Region for EKS Cluster"
-  default     = "us-east-1"
-}
-
 variable "vpc_id" {
   description = "Default VPC for terraform"
   default     = "vpc-084774308279094a4"
