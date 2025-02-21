@@ -28,7 +28,7 @@ commands:
               terraform plan -out tfapply -var="aws_region=$AWS_DEFAULT_REGION" -var="aws_access_key=$AWS_ACCESS_KEY_ID" -var="aws_secret_key=$AWS_SECRET_ACCESS_KEY"
 
 jobs:
- cci-stage-eks-tf-plan:
+  cci-stage-eks-tf-plan:
     working_directory: /tmp/project
     executor: tf-light
     environment:
@@ -43,40 +43,46 @@ jobs:
           paths:
             - .
 
- cci-stage-eks-tf-apply:
-   executor: tf-light
-   environment:
-      AWS_DEFAULT_REGION: <<pipeline.parameters.aws-region>>
-   steps:
-     - attach_workspace:
-         at: .
-     - run:
-         name: terraform apply
-         command: |
-           cd <<pipeline.parameters.tf-workspace>>
-           terraform apply -auto-approve tfapply
-         no_output_timeout: 3h     
-     - persist_to_workspace:
-         root: .
-         paths:
-           - .
+  cci-stage-eks-tf-apply:
+    executor: tf-light
+    environment:
+       AWS_DEFAULT_REGION: <<pipeline.parameters.aws-region>>
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: terraform apply
+          command: |
+            cd <<pipeline.parameters.tf-workspace>>
+            terraform apply -auto-approve tfapply
+          no_output_timeout: 3h     
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
   cci-stage-plan-destroy:
-      steps:
-        - checkout
-        - run:
-            name: terraform init & plan
-            command: |
-              cd $WORKSPACE
-              terraform init -input=false
-              terraform state list
-              terraform plan -destroy -out tfapply -var="aws_region=$AWS_DEFAULT_REGION" -var="aws_access_key=$AWS_ACCESS_KEY" -var="aws_secret_key=$AWS_SECRET_KEY"
-        - persist_to_workspace:
-            root: .
-            paths:
-              - .
+    executor: tf-light
+    environment:
+       AWS_DEFAULT_REGION: <<pipeline.parameters.aws-region>>
+    steps:
+      - checkout
+      - run:
+          name: terraform init & plan
+          command: |
+            cd $WORKSPACE
+            terraform init -input=false
+            terraform state list
+            terraform plan -destroy -out tfapply -var="aws_region=$AWS_DEFAULT_REGION" -var="aws_access_key=$AWS_ACCESS_KEY" -var="aws_secret_key=$AWS_SECRET_KEY"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
   cci-stage-tf-apply-destroy:
+    executor: tf-light
+    environment:
+       AWS_DEFAULT_REGION: <<pipeline.parameters.aws-region>>
     steps:
       - attach_workspace:
           at: .
