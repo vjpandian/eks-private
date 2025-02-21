@@ -24,12 +24,6 @@ variable "disk_size" {
   default = 250
 }
 
-
-variable "eks_managed_node_group_defaults" {
-  type    = list(string)
-  default = ["t3a.medium"]
-}
-
 variable "subnets" {
   type        = list(string)
   description = "Subnet IDs"
