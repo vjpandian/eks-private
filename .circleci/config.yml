@@ -7,6 +7,9 @@ parameters:
   tf-workspace:
     type: string
     default: "terraform-vpc"
+  destroy:
+    type: boolean
+    default: true
 
 executors:
   tf-light:
@@ -34,7 +37,6 @@ jobs:
     steps:
       - checkout
       - run: mv providers.tf <<pipeline.parameters.tf-workspace>>
-      - run: pwd
       - tf-init-plan
       - persist_to_workspace:
           root: .
@@ -59,12 +61,52 @@ jobs:
          paths:
            - .
 
+  cci-stage-plan-destroy:
+      steps:
+        - checkout
+        - run:
+            name: terraform init & plan
+            command: |
+              cd $WORKSPACE
+              terraform init -input=false
+              terraform state list
+              terraform plan -destroy -out tfapply -var="aws_region=$AWS_DEFAULT_REGION" -var="aws_access_key=$AWS_ACCESS_KEY" -var="aws_secret_key=$AWS_SECRET_KEY"
+        - persist_to_workspace:
+            root: .
+            paths:
+              - .
+
+  cci-stage-tf-apply-destroy:
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: run terraform apply
+          command: |
+            cd $WORKSPACE
+            terraform apply -destroy -auto-approve tfapply
+          no_output_timeout: 3h
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
 workflows:
   tf-cci-stage-eks:
     jobs:
       - cci-stage-eks-tf-plan:
            context: support-server
+           filters: not pipeline.parameters.destroy
       - cci-stage-eks-tf-apply:
            requires:
              - cci-stage-eks-tf-plan
            context: support-server
+           filters: not pipeline.parameters.destroy
+      - cci-stage-plan-destroy:
+           context: support-server
+           filters: pipeline.parameters.destroy
+      - cci-stage-tf-apply-destroy:
+           context: support-server
+           requires:
+             - cci-stage-plan-destroy
+           filters: pipeline.parameters.destroy
