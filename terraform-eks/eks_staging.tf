@@ -1,9 +1,9 @@
 locals {
   cluster_basename                = "vijay-staging-eks"
   kubernetes_version              = "1.32"
-  ng_support_default_min_size     = 0
-  ng_support_default_desired_size = 2
-  ng_support_default_max_size     = 5
+  ng_default_min_size             = 0
+  ng_default_desired_size         = 2
+  ng_default_max_size             = 5
   circleci_staging_eks_admin_role = "fieldeng-awesomeci-role"
 
 }
@@ -46,9 +46,9 @@ module "eks" {
   eks_managed_node_groups = {
     circleci-staging-ng = {
 
-      min_size = local.ng_support_default_min_size
-      max_size = local.ng_support_default_max_size
-      desired_size         = local.ng_support_default_desired_size
+      min_size             = local.ng_default_min_size
+      max_size             = local.ng_default_max_size
+      desired_size         = local.ng_default_desired_size
       force_update_version = false
       # The role created by the Terraform module already has the cluster-specific attributes
       # Setting this to false ensures that the name_prefix conforms to the limits set by AWS
@@ -93,9 +93,9 @@ module "eks" {
 
     circleci-staging-ng-2 = {
 
-      min_size = local.ng_support_default_min_size
-      max_size = local.ng_support_default_max_size
-      desired_size         = local.ng_desired_size
+      min_size             = local.ng_default_min_size
+      max_size             = local.ng_default_max_size
+      desired_size         = local.ng_default_desired_size
       force_update_version = true
       # The role created by the Terraform module already has the cluster-specific attributes
       # Setting this to false ensures that the name_prefix conforms to the limits set by AWS

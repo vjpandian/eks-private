@@ -3,13 +3,13 @@ terraform {
     bucket = "vijay-tf-state"
     key    = "circleci-staging-eks-us-east-1.tfstate"
     region = "us-east-1"
- }
+  }
 }
 
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = ">= 5.61.0, < 6.0.0"
     }
     circleci = {

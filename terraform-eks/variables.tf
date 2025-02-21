@@ -27,7 +27,7 @@ variable "disk_size" {
 variable "subnets" {
   type        = list(string)
   description = "Subnet IDs"
-  default     = [ "subnet-084482dafe3be89f5", "subnet-0b2627cd831f33f66", "subnet-0d432122e35eaaf3d" ]
+  default     = ["subnet-084482dafe3be89f5", "subnet-0b2627cd831f33f66", "subnet-0d432122e35eaaf3d"]
 }
 
 variable "default_subnet" {
@@ -40,8 +40,8 @@ variable "default_subnet" {
 variable "default_tags" {
   type = map(string)
   default = {
-    "enviornment"         = "circleci-staging"
-    "vendor"              = "circleci"
-    "cluster"             = "circleci-staging"
+    "enviornment" = "circleci-staging"
+    "vendor"      = "circleci"
+    "cluster"     = "circleci-staging"
   }
 }
