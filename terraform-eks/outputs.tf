@@ -4,7 +4,7 @@
 
 output "ng_sandbox_max_size" {
   description = "Max node count of the Sandbox Autoscaling nodegroup"
-  value       = local.ng_support_default_max_size
+  value       = local.ng_default_max_size
 }
 
 
