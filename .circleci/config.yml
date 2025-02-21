@@ -64,7 +64,7 @@ workflows:
     jobs:
       - cci-stage-eks-tf-plan:
            context: support-server
-      #- cci-stage-eks-tf-apply:
-      #     requires:
-      #       - cci-stage-eks-tf-plan
-      #     context: support-server
+      - cci-stage-eks-tf-apply:
+           requires:
+             - cci-stage-eks-tf-plan
+           context: support-server
