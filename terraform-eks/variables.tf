@@ -10,7 +10,7 @@ variable "eks_managed_node_group_defaults" {
 
 variable "vpc_id" {
   description = "Default VPC for terraform"
-  default     = "vpc-084774308279094a4"
+  default     = "vpc-0e3cac62b25e9feb9"
 }
 
 
@@ -33,13 +33,13 @@ variable "eks_managed_node_group_defaults" {
 variable "subnets" {
   type        = list(string)
   description = "Subnet IDs"
-  default     = ["subnet-016896490ed3c0022", "subnet-044555533b43f13f9", "subnet-08c9c502ed8fcbb0a", "subnet-0eb9dfc9c93c5dff2"]
+  default     = [ "subnet-084482dafe3be89f5", "subnet-0b2627cd831f33f66", "subnet-0d432122e35eaaf3d" ]
 }
 
 variable "default_subnet" {
   type        = string
   description = "Default Subnet ID for EC2"
-  default     = "subnet-016896490ed3c0022"
+  default     = "subnet-084482dafe3be89f5"
 }
 
 
