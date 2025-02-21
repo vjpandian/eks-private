@@ -1,13 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "-tf-state"
-    key    = "circleci-staging-eks-us-west-2.tfstate"
+    bucket = "vijay-tf-state"
+    key    = "circleci-staging-eks-us-east-1.tfstate"
     region = "us-east-1"
-
-    assume_role = {
-      role_arn = "arn:aws:iam::xxxxxx:role/circleci_aws_role"
-    }
-  }
 }
 
 terraform {
@@ -33,13 +28,7 @@ terraform {
 }
 
 provider "aws" {
-  assume_role {
-    role_arn     = "arn:aws:iam::xxxxxx:role/circleci_aws_role"
-    session_name = "circleci_staging_aws_role"
-  }
-  region = var.aws_region
-
-  default_tags {
-    tags = var.default_tags
-  }
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
+  region     = var.aws_region
 }

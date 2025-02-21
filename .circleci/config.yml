@@ -1,0 +1,70 @@
+version: 2.1
+
+parameters:
+  aws-region:
+    type: string
+    default: "us-east-1"
+  tf-workspace:
+    type: string
+    default: "terraform-vpc"
+
+executors:
+  tf-light:
+    docker:
+      - image: hashicorp/terraform:light
+    resource_class: medium
+
+commands:
+  tf-init-plan:
+    steps:
+      - run:
+           name: terraform init & plan
+           command: |
+              cd $WORKSPACE
+              terraform init -input=false
+              terraform plan -out tfapply -var="aws_region=$AWS_DEFAULT_REGION" -var="aws_access_key=$AWS_ACCESS_KEY_ID" -var="aws_secret_key=$AWS_SECRET_ACCESS_KEY"
+
+jobs:
+ cci-stage-eks-tf-plan:
+    working_directory: /tmp/project
+    executor: tf-light
+    environment:
+      AWS_DEFAULT_REGION: <<pipeline.parameters.aws-region>>
+      WORKSPACE: <<pipeline.parameters.tf-workspace>>
+    steps:
+      - checkout
+      - run: mv providers.tf <<pipeline.parameters.tf-workspace>>
+      - run: pwd
+      - tf-init-plan
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+ cci-stage-eks-tf-apply:
+   executor: tf-light
+   environment:
+      AWS_DEFAULT_REGION: <<pipeline.parameters.aws-region>>
+   steps:
+     - attach_workspace:
+         at: .
+     - run:
+         name: terraform apply
+         command: |
+           cd <<pipeline.parameters.tf-workspace>>
+           terraform apply -auto-approve tfapply
+         no_output_timeout: 3h     
+     - persist_to_workspace:
+         root: .
+         paths:
+           - .
+
+workflows:
+  tf-cci-stage-eks:
+    jobs:
+      - cci-stage-eks-tf-plan:
+           context: support-server
+      #- cci-stage-eks-tf-apply:
+      #     requires:
+      #       - cci-stage-eks-tf-plan
+      #     context: support-server

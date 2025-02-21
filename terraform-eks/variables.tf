@@ -5,12 +5,12 @@
 
 variable "eks_managed_node_group_defaults" {
   type    = list(string)
-  default = ["m5a.4xlarge"]
+  default = ["t3a.medium"]
 }
 
 variable "aws_region" {
   description = "Default AWS Region for EKS Cluster"
-  default     = "us-west-2"
+  default     = "us-east-1"
 }
 
 variable "vpc_id" {
@@ -32,7 +32,7 @@ variable "disk_size" {
 
 variable "eks_managed_node_group_defaults" {
   type    = list(string)
-  default = ["m5a.2xlarge"]
+  default = ["t3a.medium"]
 }
 
 variable "subnets" {

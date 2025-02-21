@@ -1,10 +1,10 @@
 locals {
-  cluster_basename                = "adobe-staging-eks"
+  cluster_basename                = "vijay-staging-eks"
   kubernetes_version              = "1.31"
   ng_support_default_min_size     = 0
   ng_support_default_desired_size = 4
   ng_support_default_max_size     = 5
-  circleci_staging_eks_admin_role = "adobe-cci-eks-admins"
+  circleci_staging_eks_admin_role = "fieldeng-awesomeci-role"
 
 }
 
