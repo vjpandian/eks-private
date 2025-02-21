@@ -3,6 +3,7 @@ terraform {
     bucket = "vijay-tf-state"
     key    = "circleci-staging-eks-us-east-1.tfstate"
     region = "us-east-1"
+ }
 }
 
 terraform {
