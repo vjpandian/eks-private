@@ -9,7 +9,7 @@ parameters:
     default: "terraform-eks"
   destroy:
     type: boolean
-    default: false
+    default: true
 
 executors:
   tf-light:
